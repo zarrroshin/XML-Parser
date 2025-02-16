@@ -1,7 +1,7 @@
 #pragma once
-#include "XMLNode.hpp"
 #include <vector>
-#include <stdexcept>
+#include <string>
+#include "XMLNode.hpp"
 
 class XMLParser {
 public:

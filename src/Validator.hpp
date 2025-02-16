@@ -1,10 +1,14 @@
 #pragma once
 #include "XMLNode.hpp"
 #include <vector>
+#include <stdexcept>
+
+class ValidationError : public std::runtime_error {
+public:
+    using std::runtime_error::runtime_error;
+};
 
 class Validator {
 public:
-    static bool hasDuplicateIDs(const std::vector<XMLNode>& nodes);
-    static bool validatePorts(const std::vector<XMLNode>& nodes);
-    static std::vector<XMLNode> findOrphans(const std::vector<XMLNode>& nodes);
+    static void validate(const std::vector<XMLNode>& nodes);
 };

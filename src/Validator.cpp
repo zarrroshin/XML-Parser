@@ -1,33 +1,22 @@
 #include "Validator.hpp"
 #include <unordered_set>
 
-bool Validator::hasDuplicateIDs(const std::vector<XMLNode>& nodes) {
+void Validator::validate(const std::vector<XMLNode>& nodes) {
     std::unordered_set<int> ids;
+    
+    // Check duplicate IDs
     for (const auto& node : nodes) {
-        if (ids.count(node.id)) return true;
-        ids.insert(node.id);
+        if (!ids.insert(node.id).second) {
+            throw ValidationError("شناسه تکراری: " + std::to_string(node.id));
+        }
     }
-    return false;
-}
 
-bool Validator::validatePorts(const std::vector<XMLNode>& nodes) {
-    std::unordered_set<int> validIds;
-    for (const auto& node : nodes) validIds.insert(node.id);
-
+    // Check invalid port references
     for (const auto& node : nodes) {
         for (int port : node.ports) {
-            if (port != -1 && !validIds.count(port)) return false;
+            if (port != -1 && !ids.count(port)) {
+                throw ValidationError("ارجاع به گره ناموجود: " + std::to_string(port));
+            }
         }
     }
-    return true;
-}
-
-std::vector<XMLNode> Validator::findOrphans(const std::vector<XMLNode>& nodes) {
-    std::vector<XMLNode> orphans;
-    for (const auto& node : nodes) {
-        if (node.ports.size() == 1 && node.ports[0] == -1) {
-            orphans.push_back(node);
-        }
-    }
-    return orphans;
 }

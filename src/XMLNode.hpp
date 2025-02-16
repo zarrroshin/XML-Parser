@@ -7,7 +7,7 @@ public:
     int id;
     std::string name;
     std::vector<int> ports;
-    
-    XMLNode(int id, std::string name, std::vector<int> ports)
-        : id(id), name(name), ports(ports) {}
+
+    XMLNode(int id, const std::string& name, const std::vector<int>& ports);
+    bool isOrphan() const;
 };
